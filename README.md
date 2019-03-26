@@ -1,1 +1,3 @@
 # esphome_martin-jerry-mj-sd01-dimmer
+
+Info coming soon...
