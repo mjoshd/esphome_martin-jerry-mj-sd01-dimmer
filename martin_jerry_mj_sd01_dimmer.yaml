@@ -4,12 +4,13 @@
 # D3 GPIO0: up button (inverted, input_pullup)
 # TX GPIO1: down button (inverted, input_pullup)
 # RX GPIO3: led5 (inverted)
+# D2 GPIO4: red led (inverted)
 # D1 GPIO5: led4 (inverted)
 # D6 GPIO12: led3 (inverted)
 # D7 GPIO13: pwm
 # D5 GPIO14: led2 (inverted)
 # D8 GPIO15: main button (input_pullup)
-# D0 GPIO16: led1 + relay (inverted)
+# D0 GPIO16: blue led + relay + led1 (inverted)
 # ##################################
 
 
@@ -63,6 +64,13 @@ api:
 ota:
   password: !secret esphome_ota_password
   # https://esphome.io/components/ota
+
+
+status_led:
+  # https://esphome.io/components/status_led
+  pin:
+    number: GPIO4   # Red LED
+    inverted: True
 
 
 output:
