@@ -229,15 +229,15 @@ interval:
           auto dimmer_vals = id(dimmer).get_current_values();
           if (dimmer_vals.is_on()) {
             id(dimmer_lvl) = dimmer_vals.get_brightness();
+            if (id(dimmer_lvl) > .19) { id(led2).turn_on(); }
+            if (id(dimmer_lvl) < .20) { id(led2).turn_off(); }
+            if (id(dimmer_lvl) > .39) { id(led3).turn_on(); }
+            if (id(dimmer_lvl) < .40) { id(led3).turn_off(); }
+            if (id(dimmer_lvl) > .59) { id(led4).turn_on(); }
+            if (id(dimmer_lvl) < .60) { id(led4).turn_off(); }
+            if (id(dimmer_lvl) > .79) { id(led5).turn_on(); }
+            if (id(dimmer_lvl) < .80) { id(led5).turn_off(); }
           }
-          if (id(dimmer_lvl) > .19) { id(led2).turn_on(); }
-          if (id(dimmer_lvl) < .20) { id(led2).turn_off(); }
-          if (id(dimmer_lvl) > .39) { id(led3).turn_on(); }
-          if (id(dimmer_lvl) < .40) { id(led3).turn_off(); }
-          if (id(dimmer_lvl) > .59) { id(led4).turn_on(); }
-          if (id(dimmer_lvl) < .60) { id(led4).turn_off(); }
-          if (id(dimmer_lvl) > .79) { id(led5).turn_on(); }
-          if (id(dimmer_lvl) < .80) { id(led5).turn_off(); }
           if (!dimmer_vals.is_on()) {
             id(led2).turn_off();
             id(led3).turn_off();
