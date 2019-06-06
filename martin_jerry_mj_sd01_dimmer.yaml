@@ -237,8 +237,7 @@ interval:
             if (id(dimmer_lvl) < .60) { id(led4).turn_off(); }
             if (id(dimmer_lvl) > .79) { id(led5).turn_on(); }
             if (id(dimmer_lvl) < .80) { id(led5).turn_off(); }
-          }
-          if (!dimmer_vals.is_on()) {
+          } else {
             id(led2).turn_off();
             id(led3).turn_off();
             id(led4).turn_off();
