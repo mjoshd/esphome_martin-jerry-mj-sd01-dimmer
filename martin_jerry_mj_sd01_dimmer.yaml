@@ -22,10 +22,10 @@ substitutions:
   no_delay: 0s   # transition when changing dimmer_lvl & relay delay
   transition_length: .5s   # transition when turning on/off
   long_press_min: .4s   # minimum time to activate long-press action
-  long_press_max: 2s   # maximum time to activate long-press action
+  long_press_max: 3s   # maximum time to activate long-press action
   long_press_up: 100%   # long press brightness
-  long_press_down: 33%   # long press brightness
-  long_press_main: 50%   # long press brightness
+  long_press_down: 58%   # long press brightness
+  long_press_main: 30%   # long press brightness
   ip_address: !secret martin_jerry_mj_sd01_ip   # use /config/esphome/secrets.yaml
 
 
