@@ -135,7 +135,7 @@ binary_sensor:
     name: ${friendly_name} Up Button
     id: up_button
     internal: True
-    on_press:
+    on_release:
       then:
         - lambda: |-
             if (id(dimmer_lvl) > .91) {
@@ -162,7 +162,7 @@ binary_sensor:
       mode: INPUT_PULLUP
     name: ${friendly_name} Down Button
     internal: True
-    on_press:
+    on_release:
       then:
         - lambda: !lambda |-
             if (id(dimmer_lvl) < .10) {
@@ -188,7 +188,7 @@ binary_sensor:
       mode: INPUT_PULLUP
     name: ${friendly_name} Main Button
     internal: True
-    on_press:
+    on_release:
       - light.toggle: dimmer
     on_click:
       # https://esphome.io/components/binary_sensor/index.html#on-click
