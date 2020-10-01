@@ -229,17 +229,17 @@ globals:
 
 script:
   - id: decrease_brightness
-  # https://esphome.io/guides/automations.html#script-execute-action
-  then:
-    - lambda: |-
-        if (id(dimmer_lvl) < .10) {
-          id(dimmer_lvl) = .01;
-        }
-        else if (id(dimmer_lvl) >= .10) {
-          id(dimmer_lvl) -= .083;
-        };
-        
-        id(apply_dimming).execute();
+    # https://esphome.io/guides/automations.html#script-execute-action
+    then:
+      - lambda: |-
+          if (id(dimmer_lvl) < .10) {
+            id(dimmer_lvl) = .01;
+          }
+          else if (id(dimmer_lvl) >= .10) {
+            id(dimmer_lvl) -= .083;
+          };
+          
+          id(apply_dimming).execute();
   - id: increase_brightness
     # https://esphome.io/guides/automations.html#script-execute-action
     then:
