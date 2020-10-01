@@ -26,6 +26,8 @@ substitutions:
   long_press_up: 100%   # long press brightness
   long_press_down: 58%   # long press brightness
   long_press_main: 30%   # long press brightness
+  off_press_up: 100%     # up press while off brightness
+  off_press_down: 50%    # down press while off brightness
   ip_address: !secret martin_jerry_mj_sd01_ip   # use /config/esphome/secrets.yaml
   hold_delay: 2s         # delay before hold action is ran.
   hold_interval: 1s      # interval between holding brightness changes.
@@ -138,14 +140,22 @@ binary_sensor:
     internal: True
     on_press:
       then:
-        - script.execute: increase_brightness
-        - delay: ${hold_delay}
-        - while:
+        - if:
             condition:
-              binary_sensor.is_on: up_button
+              light.is_on: dimmer
             then:
               - script.execute: increase_brightness
-              - delay: ${hold_interval}
+              - delay: ${hold_delay}
+              - while:
+                  condition:
+                    binary_sensor.is_on: up_button
+                  then:
+                    - script.execute: increase_brightness
+                    - delay: ${hold_interval}
+            else:
+              - light.turn_on:
+                  id: dimmer
+                  brightness: ${off_press_up}
     on_click:
       # https://esphome.io/components/binary_sensor/index.html#on-click
       min_length: ${long_press_min}
@@ -165,14 +175,22 @@ binary_sensor:
     internal: True
     on_press:
       then:
-        - script.execute: decrease_brightness
-        - delay: ${hold_delay}
-        - while:
+        - if:
             condition:
-              binary_sensor.is_on: down_button
+              light.is_on: dimmer
             then:
               - script.execute: decrease_brightness
-              - delay: ${hold_interval}
+              - delay: ${hold_delay}
+              - while:
+                  condition:
+                    binary_sensor.is_on: down_button
+                  then:
+                    - script.execute: decrease_brightness
+                    - delay: ${hold_interval}
+            else:
+              - light.turn_on:
+                  id: dimmer
+                  brightness: ${off_press_down}
     on_click:
       # https://esphome.io/components/binary_sensor/index.html#on-click
       min_length: ${long_press_min}
