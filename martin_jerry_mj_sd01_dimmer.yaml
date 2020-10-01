@@ -26,8 +26,11 @@ substitutions:
   long_press_up: 100%   # long press brightness
   long_press_down: 58%   # long press brightness
   long_press_main: 30%   # long press brightness
+  off_press_up: 100%     # up press while off brightness
+  off_press_down: 50%    # down press while off brightness
   ip_address: !secret martin_jerry_mj_sd01_ip   # use /config/esphome/secrets.yaml
-
+  hold_delay: 2s         # delay before hold action is ran.
+  hold_interval: 1s      # interval between holding brightness changes.
 
 esphome:
   # https://esphome.io/components/esphome
@@ -135,16 +138,24 @@ binary_sensor:
     name: ${friendly_name} Up Button
     id: up_button
     internal: True
-    on_release:
+    on_press:
       then:
-        - lambda: |-
-            if (id(dimmer_lvl) > .91) {
-              id(dimmer_lvl) = 1.0;
-            }
-            else if (id(dimmer_lvl) <= .91) {
-              id(dimmer_lvl) += .083;
-            };
-            id(apply_dimming).execute();
+        - if:
+            condition:
+              light.is_on: dimmer
+            then:
+              - script.execute: increase_brightness
+              - delay: ${hold_delay}
+              - while:
+                  condition:
+                    binary_sensor.is_on: up_button
+                  then:
+                    - script.execute: increase_brightness
+                    - delay: ${hold_interval}
+            else:
+              - light.turn_on:
+                  id: dimmer
+                  brightness: ${off_press_up}
     on_click:
       # https://esphome.io/components/binary_sensor/index.html#on-click
       min_length: ${long_press_min}
@@ -162,16 +173,24 @@ binary_sensor:
       mode: INPUT_PULLUP
     name: ${friendly_name} Down Button
     internal: True
-    on_release:
+    on_press:
       then:
-        - lambda: !lambda |-
-            if (id(dimmer_lvl) < .10) {
-              id(dimmer_lvl) = .01;
-            }
-            else if (id(dimmer_lvl) >= .10) {
-              id(dimmer_lvl) -= .083;
-            };
-            id(apply_dimming).execute();
+        - if:
+            condition:
+              light.is_on: dimmer
+            then:
+              - script.execute: decrease_brightness
+              - delay: ${hold_delay}
+              - while:
+                  condition:
+                    binary_sensor.is_on: down_button
+                  then:
+                    - script.execute: decrease_brightness
+                    - delay: ${hold_interval}
+            else:
+              - light.turn_on:
+                  id: dimmer
+                  brightness: ${off_press_down}
     on_click:
       # https://esphome.io/components/binary_sensor/index.html#on-click
       min_length: ${long_press_min}
@@ -209,6 +228,30 @@ globals:
 
 
 script:
+  - id: decrease_brightness
+    # https://esphome.io/guides/automations.html#script-execute-action
+    then:
+      - lambda: |-
+          if (id(dimmer_lvl) < .10) {
+            id(dimmer_lvl) = .01;
+          }
+          else if (id(dimmer_lvl) >= .10) {
+            id(dimmer_lvl) -= .083;
+          };
+          
+          id(apply_dimming).execute();
+  - id: increase_brightness
+    # https://esphome.io/guides/automations.html#script-execute-action
+    then:
+      - lambda: |-
+          if (id(dimmer_lvl) > .91) {
+            id(dimmer_lvl) = 1.0;
+          }
+          else if (id(dimmer_lvl) <= .91) {
+            id(dimmer_lvl) += .083;
+          };
+
+          id(apply_dimming).execute();
   - id: apply_dimming
     # https://esphome.io/guides/automations.html#script-execute-action
     then:
